@@ -1,2 +1,4 @@
+# Track the large files using Git Large File Storage (LFS)
+
 *.pth filter=lfs diff=lfs merge=lfs -text
 *.pt filter=lfs diff=lfs merge=lfs -text
