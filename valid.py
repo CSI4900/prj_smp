@@ -1,4 +1,4 @@
-#*********************************************************************************************
+# *********************************************************************************************
 # FILE   NAME:    valid.py
 # PROJ   NAME:    Segmentation
 # DESCRIPTION:    validation of SMP (Segmentation Models Pytorch)
@@ -8,24 +8,29 @@
 #
 # REFERENCE: https://github.com/qubvel-org/segmentation_models.pytorch
 #
-#*********************************************************************************************
-import time, os, cv2, torch, numpy as np
+# *********************************************************************************************
+import time
+import os
+import cv2
+import torch
+import numpy as np
 import segmentation_models_pytorch as smp
 from config import *
 
-results='./results'
+results = './results'
 os.makedirs(results, exist_ok=True)
+
 
 def valid():
     N_CLASSES = len(CLASSES)
     # create segmentation model with pretrained encoder
-    model = smp.Unet(#smp.FPN(
-        encoder_name=ENCODER, 
-        encoder_weights=ENCODER_WEIGHTS, 
-        classes=N_CLASSES, 
+    model = smp.Unet(  # smp.FPN(
+        encoder_name=ENCODER,
+        encoder_weights=ENCODER_WEIGHTS,
+        classes=N_CLASSES,
         activation=ACTIVATION,
     )
-    
+
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     if LOAD_BEST_MODEL:
@@ -35,8 +40,8 @@ def valid():
         param = torch.load(LATEST_MODE_NM, map_location=device)
         model.load_state_dict(param['model_param'])
 
-
-    preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
+    preprocessing_fn = smp.encoders.get_preprocessing_fn(
+        ENCODER, ENCODER_WEIGHTS)
 
     # start inference
     video_file = 'racing_cars.sd.mp4'
@@ -52,16 +57,16 @@ def valid():
         ret, image = cap.read()
         if not ret:
             break
-        H,W,C = image.shape
+        H, W, C = image.shape
         """
         image = cv2.medianBlur(image, 7)
         edge = cv2.Laplacian(image, cv2.CV_32F) #edge = cv2.Scharr(image, cv2.CV_32F, 0, 1)
         image = image.astype(np.float32)
         image += edge
         """
-        image = cv2.resize(image, (384,384), interpolation = cv2.INTER_CUBIC)
+        image = cv2.resize(image, (384, 384), interpolation=cv2.INTER_CUBIC)
         din = preprocessing_fn(image, input_space='BGR')
-        din = torch.from_numpy(din).float().permute(2,0,1).unsqueeze(0)
+        din = torch.from_numpy(din).float().permute(2, 0, 1).unsqueeze(0)
 
         with torch.no_grad():
             # Replace NVTX range_push and range_pop with time-based profiling
@@ -73,19 +78,19 @@ def valid():
         print(f"Frame {frame_cnt} took {end_time - start_time:.4f} seconds")
 
         # multi-class segmentation
-        if N_CLASSES >1:
+        if N_CLASSES > 1:
             _, label = torch.max(dout, 1)
             scale = 255 // (N_CLASSES-1)
         # single-class segmentation: set a threshold
         else:
             label = (dout > 0.9).int()[0]
             scale = 200
-        label = label.permute(1,2,0).cpu().numpy()
+        label = label.permute(1, 2, 0).cpu().numpy()
 
         image = (label * scale).astype(np.uint8())
         image = cv2.resize(image, (W, H))
-        cv2.imwrite(os.path.join(results, 'label_%04d.png'%frame_cnt), image)
-        
+        cv2.imwrite(os.path.join(results, 'label_%04d.png' % frame_cnt), image)
+
         """
         r = np.zeros_like(label)
         g = np.zeros_like(label)
@@ -99,6 +104,7 @@ def valid():
         cv2.imwrite(os.path.join(args.results, 'color_%04d.png'%frame_cnt), image)
         """
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
 
     valid()

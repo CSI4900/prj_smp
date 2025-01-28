@@ -1,4 +1,4 @@
-#*********************************************************************************************
+# *********************************************************************************************
 # FILE   NAME:    config.py
 # PROJ   NAME:    Segmentation
 # DESCRIPTION:    configuration of training/validation env
@@ -10,12 +10,13 @@
 # YYYY/MMM/DD     Author       Comments
 # 2024 MAR 01     Yu Liu       creation
 #
-#*********************************************************************************************
+# *********************************************************************************************
 
-ENCODER = 'resnet34' #'se_resnext50_32x4d'
+ENCODER = 'resnet34'  # 'se_resnext50_32x4d'
 ENCODER_WEIGHTS = 'imagenet'
 CLASSES = ['car']
-ACTIVATION = 'sigmoid' # could be None for logits or 'softmax2d' for multiclass segmentation
+# could be None for logits or 'softmax2d' for multiclass segmentation
+ACTIVATION = 'sigmoid'
 DEVICE = 'cuda:0'
 
 TRAIN_DATA_DIR = '../../data/CamVid'
