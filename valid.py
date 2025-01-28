@@ -6,13 +6,10 @@
 # HOW TO USE:     download CamVid data to
 #               git clone https://github.com/alexgkendall/SegNet-Tutorial ./data
 #
-#
-# REVISION HISTORY
-# YYYY/MMM/DD     Author       Comments
-# 2024 MAR 01     Yu Liu       creation
+# REFERENCE: https://github.com/qubvel-org/segmentation_models.pytorch
 #
 #*********************************************************************************************
-import os, cv2, torch, numpy as np
+import time, os, cv2, torch, numpy as np
 import segmentation_models_pytorch as smp
 from config import *
 
@@ -28,19 +25,21 @@ def valid():
         classes=N_CLASSES, 
         activation=ACTIVATION,
     )
+    
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
     if LOAD_BEST_MODEL:
-        param = torch.load(LATEST_MODE_NM)
+        param = torch.load(BEST_MODEL_NM, map_location=device)
         model.load_state_dict(param)
     else:
-        param = torch.load(LATEST_MODE_NM)
+        param = torch.load(LATEST_MODE_NM, map_location=device)
         model.load_state_dict(param['model_param'])
 
 
     preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
     # start inference
-    video_file = '../../RacingCars/racing_cars.sd.mp4'
+    video_file = 'racing_cars.sd.mp4'
     cap = cv2.VideoCapture(video_file)
     n_frame = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     vsize = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -65,9 +64,13 @@ def valid():
         din = torch.from_numpy(din).float().permute(2,0,1).unsqueeze(0)
 
         with torch.no_grad():
-            torch.cuda.nvtx.range_push('frame%03d'%frame_cnt)
+            # Replace NVTX range_push and range_pop with time-based profiling
+            start_time = time.time()  # Start time before the model computation
             dout = model(din)
-            torch.cuda.nvtx.range_pop()
+            end_time = time.time()  # End time after the model computation
+
+        # Print or log the time taken for the operation
+        print(f"Frame {frame_cnt} took {end_time - start_time:.4f} seconds")
 
         # multi-class segmentation
         if N_CLASSES >1:
