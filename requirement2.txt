@@ -1,0 +1,8 @@
+torch --pre --index-url https://download.pytorch.org/whl/nightly/cu121
+torchvision --pre --index-url https://download.pytorch.org/whl/nightly/cu121
+torchaudio --pre --index-url https://download.pytorch.org/whl/nightly/cu121
+numpy>=1.21.0
+opencv-python>=4.5.3
+segmentation-models-pytorch>=0.3.0
+argparse>=1.4.0
+sgmllib3k

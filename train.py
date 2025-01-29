@@ -23,7 +23,7 @@ from config import *
 
 def get_arguments():
     parser = ArgumentParser()
-    parser.add_argument("--epochs", type=int, default=300)
+    parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--init_lr", type=float, default=1e-4)
     parser.add_argument("--last_lr", type=float, default=1e-6)
     parser.add_argument("--lrs_type", type=int, default=1, choices=[0, 1])
@@ -135,8 +135,8 @@ def train():
             print('Model saved!')
         
         if args.lrs_type==0:
-            if epoch_cnt == 25:
-                optimizer.param_groups[0]['lr'] = 1e-5
+            if epoch_cnt == 25: # line moded
+                train_epoch.optimizer.param_groups[0]['lr'] = 1e-5
         elif args.lrs_type==1:
             sched.step()
         else:

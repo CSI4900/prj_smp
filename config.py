@@ -15,11 +15,11 @@
 ENCODER = 'resnet34' #'se_resnext50_32x4d'
 ENCODER_WEIGHTS = 'imagenet'
 CLASSES = ['car']
-ACTIVATION = 'sigmoid' # could be None for logits or 'softmax2d' for multiclass segmentation
+ACTIVATION = 'softmax2d' # could be None for logits or 'softmax2d' for multiclass segmentation
 DEVICE = 'cuda:0'
 
-TRAIN_DATA_DIR = '../../data/CamVid'
+TRAIN_DATA_DIR = './data/CamVid' #path moded
 
 LOAD_BEST_MODEL = False
-LATEST_MODE_NM = './params/latest.pt'
-BEST_MODEL_NM = './params/best.pth'
+LATEST_MODE_NM = './params/latest2.pt'
+BEST_MODEL_NM = './params/best2.pth'
