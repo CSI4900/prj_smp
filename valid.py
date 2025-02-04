@@ -31,13 +31,11 @@ def valid():
         activation=ACTIVATION,
     )
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
     if LOAD_BEST_MODEL:
-        param = torch.load(BEST_MODEL_NM, map_location=device)
+        param = torch.load(BEST_MODEL_NM)
         model.load_state_dict(param)
     else:
-        param = torch.load(LATEST_MODE_NM, map_location=device)
+        param = torch.load(LATEST_MODE_NM, map_location=DEVICE)
         model.load_state_dict(param['model_param'])
 
     preprocessing_fn = smp.encoders.get_preprocessing_fn(
