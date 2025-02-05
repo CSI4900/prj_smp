@@ -175,4 +175,7 @@ pyrightconfig.json
 
 # path
 data/
+params/
+results_multi/
+results_multi_2/
 # End of https://www.toptal.com/developers/gitignore/api/python
