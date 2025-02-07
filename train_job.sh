@@ -1,13 +1,3 @@
-# File name:        train_job.sh
-# Project:          Segmentation
-# Description:      This script submits a training job (run train.py).
-# 
-# Usage:            $ sbatch train_job.sh
-#
-# Contributors: 
-# - Zechen Zhou     zzhou186@uottawa.ca
-# - Shun Hei Yiu    syiu017@uottawa.ca
-
 #!/bin/bash
 #SBATCH --time=0-00:10:00      # Set a time limit
 #SBATCH --account=def-jyzhao   # Specify the account under which this job runs
@@ -15,6 +5,22 @@
 #SBATCH --gpus-per-node=1      # Request 1 GPU per node
 #SBATCH --cpus-per-task=10     # Request 10 CPU cores per task
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK     # Set the number of OpenMP threads to match the allocated CPUs.
+
+
+# =====================================================
+# Batch Script for Compute Canada
+# Author:       Your Name
+# Date:         2025-02-06
+# Description:  This script runs a Python program using
+#               a virtual environment and submits a 
+#               SLURM job (run train.py).
+#
+# Usage:        $ sbatch train_job.sh
+#
+# Contributors: 
+# - Zechen Zhou     zzhou186@uottawa.ca
+# - Shun Hei Yiu    syiu017@uottawa.ca
+# =====================================================
 
 echo "Hello World"
 
