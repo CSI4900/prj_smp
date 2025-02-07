@@ -15,7 +15,9 @@ import torch
 
 ENCODER = 'resnet34'  # 'se_resnext50_32x4d'
 ENCODER_WEIGHTS = 'imagenet'
-CLASSES = ['car']
+CLASSES = ['sky', 'building', 'pole', 'road', 'pavement',
+               'tree', 'signsymbol', 'fence', 'car',
+               'pedestrian', 'bicyclist', 'unlabelled']
 # could be None for logits or 'softmax2d' for multiclass segmentation
 ACTIVATION = 'sigmoid'
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')   

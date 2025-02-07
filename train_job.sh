@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --time=0-00:10:00      # Set a time limit
+#SBATCH --time=0-00:90:00      # Set a time limit
 #SBATCH --account=def-jyzhao   # Specify the account under which this job runs
 #SBATCH --mem=16000M           # Request 32GB of RAM
 #SBATCH --gpus-per-node=1      # Request 1 GPU per node
@@ -46,6 +46,6 @@ source ~/prj_smp_workspace/env/bin/activate
 
 tensorboard --logdir=${logdir}/lightning_logs --host 0.0.0.0 --load_fast false & \
     python ~/prj_smp_workspace/train.py \
-    --epochs 10
+    --epochs 300
     # --model Conv \
     # --batch_size 32 \
