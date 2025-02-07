@@ -30,9 +30,13 @@ valid.py: used to validate the trained model with a video cliip called racing_ca
 
 -   Load opencv-python module (***need to be done outside of the virtual environment***), 4.10.0 is the latest version available on the Alliance by the time of writing (cannot be installed using pip): ```module load opencv/4.10.0```
 
+-   Load Git LFS (large File Storage) (***need to be done outside of the virtual environment***): ```module load git-lfs```
+
 -   Create a virtual environment **inside your project:** ```virtualenv --no-download env```
 
 -   Activate the virtual environment: ```source env/bin/activate```
+
+-   Initializes Git Large File Storage (LFS): ```git lfs install```
 
 -   Upgrade pip in the virtual environment: ```pip install --no-index --upgrade``` (--no-index is to download the available packages from the Alliance instead of from PyPI)
 
@@ -49,7 +53,6 @@ valid.py: used to validate the trained model with a video cliip called racing_ca
 -   Cancel a job: ```scancel YOUR_JOBID```
 
 -   Check the submitted jobs' information: ```sq```
-
 
 # References
 
