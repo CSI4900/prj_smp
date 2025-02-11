@@ -40,7 +40,7 @@ valid.py: used to validate the trained model with a video cliip called racing_ca
 
 -   Upgrade pip in the virtual environment: ```pip install --no-index --upgrade``` (--no-index is to download the available packages from the Alliance instead of from PyPI)
 
--   Install the packages listed on the requirement.txt: ```pip install --no-index -r requirement.txt```
+-   Install the packages listed on the requirements.txt: ```pip install --no-index -r requirements.txt```
 
 -   Exit the virtual environment: ```deactivate```
 
