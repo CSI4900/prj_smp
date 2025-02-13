@@ -19,9 +19,9 @@ valid.py: used to validate the trained model with a video cliip called racing_ca
 
 -   Create a symbolic link on the home directory that associates to your project on the Alliance (*optional*): ```ln -s <target_file_or_directory> <link_name>```
 
-    e.g. ```ln -s projects/def-jyzhao/zzhou186/prj_smp/ prj_smp_workspace```
+    e.g. ```ln -s projects/def-jyzhao/USERNAME/prj_smp/ prj_smp_workspace```
 
-    Next time we can ```cd prj_smp_workspace``` instead of ```cd projects/def-jyzhao/zzhou186/prj_smp```
+    Next time we can ```cd prj_smp_workspace``` instead of ```cd projects/def-jyzhao/USERNAME/prj_smp```
 
 ## Virtual Environment On The Alliance
 -   Discover the versions of Python available: ```module avail python```
@@ -38,7 +38,7 @@ valid.py: used to validate the trained model with a video cliip called racing_ca
 
 -   Initializes Git Large File Storage (LFS): ```git lfs install```
 
--   Upgrade pip in the virtual environment: ```pip install --no-index --upgrade``` (--no-index is to download the available packages from the Alliance instead of from PyPI)
+-   Upgrade pip in the virtual environment: ```pip install --no-index --upgrade pip``` (--no-index is to download the available packages from the Alliance instead of from PyPI)
 
 -   Install the packages listed on the requirements.txt: ```pip install --no-index -r requirements.txt```
 
