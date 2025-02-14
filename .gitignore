@@ -186,3 +186,4 @@ params/
 results_image/
 results_image_2/
 *.out
+*.png

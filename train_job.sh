@@ -47,6 +47,6 @@ source ~/prj_smp_workspace/env/bin/activate
 
 tensorboard --logdir=${logdir}/lightning_logs --host 0.0.0.0 --load_fast false & \
     python ~/prj_smp_workspace/train.py \
-    --epochs 5
+    --epochs 400
     # --model Conv \
     # --batch_size 32 \
