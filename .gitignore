@@ -180,3 +180,9 @@ results/
 
 # Ignore vscode configuration
 .vscode
+
+
+params/
+results_image/
+results_image_2/
+*.out
