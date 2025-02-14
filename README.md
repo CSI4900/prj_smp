@@ -38,7 +38,7 @@ valid.py: used to validate the trained model with a video cliip called racing_ca
 
 -   Initializes Git Large File Storage (LFS): ```git lfs install```
 
--   Upgrade pip in the virtual environment: ```pip install --no-index --upgrade``` (--no-index is to download the available packages from the Alliance instead of from PyPI)
+-   Upgrade pip in the virtual environment: ```pip install --no-index --upgrade pip``` (--no-index is to download the available packages from the Alliance instead of from PyPI)
 
 -   Install the packages listed on the requirement.txt: ```pip install --no-index -r requirement.txt```
 

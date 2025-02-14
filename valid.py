@@ -15,11 +15,12 @@ import cv2
 import torch
 import numpy as np
 import segmentation_models_pytorch as smp
-from config import *
+# from config import *
+from config_valid import *
+
 
 results = './results'
 os.makedirs(results, exist_ok=True)
-
 
 def valid():
     N_CLASSES = len(CLASSES)

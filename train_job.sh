@@ -30,6 +30,7 @@ nvidia-smi
 # Load needed python and cuda modules
 module load python/3.12.4 cuda cudnn
 
+module load opencv/4.10.0
 # Activate your environment
 source ~/prj_smp_workspace/env/bin/activate
 

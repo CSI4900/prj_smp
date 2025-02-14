@@ -35,7 +35,7 @@ class CamVid(BaseDataset):
 
     CLASSES = ['sky', 'building', 'pole', 'road', 'pavement',
                'tree', 'signsymbol', 'fence', 'car',
-               'pedestrian', 'bicyclist', 'unlabelled']
+               'pedestrian', 'bicycle', 'unlabelled']
 
     def __init__(
             self,
