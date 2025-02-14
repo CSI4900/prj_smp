@@ -30,6 +30,7 @@ nvidia-smi
 # Load needed python and cuda modules
 module load python/3.12.4 cuda cudnn
 
+module load opencv/4.10.0
 # Activate your environment
 source ~/prj_smp_workspace/env/bin/activate
 
@@ -46,6 +47,6 @@ source ~/prj_smp_workspace/env/bin/activate
 
 tensorboard --logdir=${logdir}/lightning_logs --host 0.0.0.0 --load_fast false & \
     python ~/prj_smp_workspace/train.py \
-    --epochs 300
+    --epochs 5
     # --model Conv \
     # --batch_size 32 \

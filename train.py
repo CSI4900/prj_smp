@@ -16,6 +16,7 @@ import os
 import cv2
 import torch
 import numpy as np
+import pandas as pd
 import segmentation_models_pytorch as smp
 from segmentation_models_pytorch import utils
 from torch.utils.data import DataLoader
@@ -130,6 +131,7 @@ def train():
     # train model for args.epochs
     os.makedirs('params', exist_ok=True)
     max_score = 0
+    history = []
     for epoch_cnt in range(0, args.epochs):
 
         print('\nEpoch: {}'.format(epoch_cnt))
@@ -144,11 +146,20 @@ def train():
 
         if args.lrs_type == 0:
             if epoch_cnt == 25:
-                optimizer.param_groups[0]['lr'] = 1e-5
+                train_epoch.optimizer.param_groups[0]['lr'] = 1e-5
         elif args.lrs_type == 1:
             sched.step()
         else:
             raise NotImplemented('not defined lr scheduler')
+
+        history.append({
+            'epoch': epoch_cnt,
+            'lr': train_epoch.optimizer.param_groups[0]['lr'],
+            'train_loss': train_logs['dice_loss'],
+            'valid_loss': valid_logs['dice_loss'],
+            'train_iou': train_logs['iou_score'],
+            'valid_iou': valid_logs['iou_score'],
+        })
 
         torch.save({
             'model_param': model.state_dict(),
@@ -156,6 +167,8 @@ def train():
             'sched_param': sched.state_dict(),
             'epoch_count': epoch_cnt,
         }, LATEST_MODE_NM)
+    
+    pd.DataFrame(history).to_csv('training_log.csv', index=False)
 
 
 if __name__ == '__main__':
