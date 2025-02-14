@@ -14,12 +14,14 @@
 
 ENCODER = 'resnet34' #'se_resnext50_32x4d'
 ENCODER_WEIGHTS = 'imagenet'
-CLASSES = ['car']
-ACTIVATION = 'softmax2d' # could be None for logits or 'softmax2d' for multiclass segmentation
-DEVICE = 'cuda:0'
+CLASSES = ['sky', 'tree', 'signsymbol', 'car',
+               'pedestrian', 'bicyclist', 'unlabelled']
+# could be None for logits or 'softmax2d' for multiclass segmentation default = sigmoid
+ACTIVATION = 'softmax2d'
+DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')   
 
 TRAIN_DATA_DIR = './data/CamVid' #path moded
 
 LOAD_BEST_MODEL = False
-LATEST_MODE_NM = './params/latest2.pt'
-BEST_MODEL_NM = './params/best2.pth'
+LATEST_MODE_NM = './params/resnet34_imagenet_sigmoid_7classes.pt'
+BEST_MODEL_NM = './params/resnet34_imagenet_sigmoid_7classes.pth'

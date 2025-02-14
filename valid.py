@@ -18,7 +18,8 @@ from collections import OrderedDict
 import segmentation_models_pytorch as smp
 from config import *
 
-results='./results_multi'
+from collections import OrderedDict
+results = './results_3'
 os.makedirs(results, exist_ok=True)
 
 def valid():
@@ -57,16 +58,14 @@ def valid():
         ret, image = cap.read()
         if not ret:
             break
-        H,W,C = image.shape
-        """
+        H, W, C = image.shape
+        
         image = cv2.medianBlur(image, 7)
         edge = cv2.Laplacian(image, cv2.CV_32F) #edge = cv2.Scharr(image, cv2.CV_32F, 0, 1)
         image = image.astype(np.float32)
         image += edge
-        """
-        # if reading a single picture
-        # image = cv2.imread('cccc.jpg')
-        image = cv2.resize(image, (384,384), interpolation = cv2.INTER_CUBIC)
+        
+        image = cv2.resize(image, (384, 384), interpolation=cv2.INTER_CUBIC)
         din = preprocessing_fn(image, input_space='BGR')
         din = torch.from_numpy(din).float().permute(2,0,1).unsqueeze(0)
 
@@ -107,23 +106,19 @@ def valid():
         # color map for 12 classes
         # The order of class should be the same as config.py
         # As it is orderedDict
-        color_map = OrderedDict([
-            ('sky', (190, 255, 255)),  # sky blue ( a little bit of white)
-            ('building', (255, 255, 0)),  # yellow
-            ('pole', (150, 45, 255)),  # purple
-            ('road', (70, 70, 70)),  # grey
-            ('pavement', (255, 200, 201)),  # pink
-            ('tree', (0, 255, 100)),  # green
-            ('signsymbol', (255, 0, 0)),  # red
-            ('fence', (67, 255, 184)),  # mint
-            ('car', (0, 0, 255)),  # blue
-            ('pedestrian', (255, 255, 255)),  # white
-            ('bicycle', (119, 11, 32)),  # dark red
-            ('unlabeled', (0, 0, 0))  # black
-        ])
+        results_colored = results+'colored'
+        os.makedirs(results, exist_ok=True)
 
-        # print colored label
-        # !!!do not forget to change the saved png name everytime we try a different configuration
+        color_map = OrderedDict([
+        ('sky', (190, 255, 255)),  # sky blue ( a little bit of white)
+        ('tree', (0, 255, 100)),  # green
+        ('signsymbol', (255, 0, 0)),  # red
+        ('car', (0, 0, 255)),  # blue
+        ('pedestrian', (255, 255, 255)),  # white
+        ('bicycle', (119, 11, 32)),  # dark red
+        ('unlabeled', (0, 0, 0))  # black
+        ])
+        
         r = np.zeros_like(label)
         g = np.zeros_like(label)
         b = np.zeros_like(label)
@@ -133,29 +128,8 @@ def valid():
             b[label==k] = color[2]
         image = np.concatenate((b,g,r), axis=2).astype(np.uint8())
         image = cv2.resize(image, (hsize, vsize))
-        cv2.imwrite(os.path.join(results, 'U_twice_seed_1.4_multiclass_color_%04d.png'%frame_cnt), image)
-
-
-
-        # print the 2nd likelihood using the kthvalue method4
-        # Please see the "test.py" to see the reason why and example for these methods
-        # !!!do not forget to change the saved png name everytime we try a different configuration
-        """
-        label_second = label_second.permute(1, 2, 0).cpu().numpy()
-        image_second = (label_second * scale).astype(np.uint8())
-        image_second = cv2.resize(image_second, (W, H))
-
-        r = np.zeros_like(label_second)
-        g = np.zeros_like(label_second)
-        b = np.zeros_like(label_second)
-        for k, color in enumerate(color_map.values()):
-            r[label_second == k] = color[0]
-            g[label_second == k] = color[1]
-            b[label_second == k] = color[2]
-        image_second = np.concatenate((b, g, r), axis=2).astype(np.uint8())
-        image_second = cv2.resize(image_second, (hsize, vsize))
-        cv2.imwrite(os.path.join(results, 'U_twice_seed_1.4_multiclass_color2222_%04d.png' % frame_cnt), image_second)
-        """
+        cv2.imwrite(os.path.join(results, 'color_%04d.png'%frame_cnt), image)
+        
 
 
         # print the 2nd likelihood using the topk method

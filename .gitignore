@@ -173,9 +173,17 @@ poetry.toml
 # LSP config files
 pyrightconfig.json
 
-# path
-data/
-params/
-results_multi/
-results_multi_2/
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+# Ignore results from valid.py
+results/
+
+# Ignore vscode configuration
+.vscode
+
+
+params/
+results_image/
+results_image_2/
+*.out
+*.png
