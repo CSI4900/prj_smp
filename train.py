@@ -17,7 +17,9 @@ import cv2
 import torch
 import numpy as np
 import pandas as pd
+import random
 import segmentation_models_pytorch as smp
+
 from segmentation_models_pytorch import utils
 from torch.utils.data import DataLoader
 from dataset.camvid import CamVid
@@ -131,7 +133,10 @@ def train():
     # train model for args.epochs
     os.makedirs('params', exist_ok=True)
     max_score = 0
+
+    # Store the data for plotting
     history = []
+
     for epoch_cnt in range(0, args.epochs):
 
         print('\nEpoch: {}'.format(epoch_cnt))
@@ -167,10 +172,19 @@ def train():
             'sched_param': sched.state_dict(),
             'epoch_count': epoch_cnt,
         }, LATEST_MODE_NM)
-    
+
     pd.DataFrame(history).to_csv('training_log.csv', index=False)
 
 
 if __name__ == '__main__':
+    # Fix the seed to ensures reproducibility, meaning that running
+    # the same code multiple times will produce the same results.
+    # Ensures consistency across runs for fair comparisons.
+    seed = 12345
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed_all(seed)
+    torch.backends.cudnn.deterministic = True  # Ensures deterministic behavior
 
     train()
