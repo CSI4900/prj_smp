@@ -16,8 +16,14 @@ import torch
 import numpy as np
 import segmentation_models_pytorch as smp
 from config import *
+from collections import OrderedDict
 
+# results = './results_CityScapes_30Classes_val_bike_cars_2nd_test'
+# results = './results_CityScapes_30Classes_val_bike_cars_complete'
 results = './results'
+# results = './results_CityScapes_12Classes_val_racing_cars'
+# results = './results_CityScapes_12Classes_val_bike_cars'
+# results = './results_CityScapes_30Classes_val_racing_cars_2nd_test'
 os.makedirs(results, exist_ok=True)
 
 
@@ -32,17 +38,17 @@ def valid():
     )
 
     if LOAD_BEST_MODEL:
-        param = torch.load(BEST_MODEL_NM)
-        model.load_state_dict(param)
+        param = torch.load(BEST_MODEL_NM, map_location=DEVICE, weights_only=False)
+        model.load_state_dict(param['model_param'])
     else:
-        param = torch.load(LATEST_MODE_NM, map_location=DEVICE)
+        param = torch.load(LATEST_MODE_NM, map_location=DEVICE, weights_only=False)
         model.load_state_dict(param['model_param'])
 
     preprocessing_fn = smp.encoders.get_preprocessing_fn(
         ENCODER, ENCODER_WEIGHTS)
 
     # start inference
-    video_file = 'racing_cars.sd.mp4'
+    video_file = VALID_VIDEO_DIR
     cap = cv2.VideoCapture(video_file)
     n_frame = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     vsize = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -87,9 +93,57 @@ def valid():
 
         image = (label * scale).astype(np.uint8())
         image = cv2.resize(image, (W, H))
+        '''
         cv2.imwrite(os.path.join(results, 'label_%04d.png' % frame_cnt), image)
+        '''
 
-        """
+        color_map = OrderedDict([
+            # Roads and infrastructure
+            ('road', (128, 64, 128)),  # Purple color for roads
+            ('sidewalk', (244, 35, 232)),  # Pink color for sidewalks
+            ('parking', (250, 170, 160)),  # Light red color for parking areas
+            ('rail track', (230, 150, 140)),  # Light brown color for rail tracks
+
+            # People and vehicles
+            ('person', (220, 20, 60)),  # Red color for a person
+            ('rider', (255, 0, 0)),  # Bright red color for a rider (e.g., on a bike or motorcycle)
+
+            ('car', (0, 0, 142)),  # Dark blue color for cars
+            ('truck', (0, 0, 70)),  # Darker blue color for trucks
+            ('bus', (0, 60, 100)),  # Blue-green color for buses
+            ('on rails', (0, 80, 100)),  # Bluish color for vehicles on rails
+            ('motorcycle', (0, 0, 230)),  # Bright blue color for motorcycles
+            ('bicycle', (34, 139, 34)),  # Bright green color for bicycles (updated)
+            ('caravan', (0, 0, 90)),  # Dark blue color for caravans
+            ('trailer', (0, 0, 110)),  # Dark blue color for trailers
+
+            # Structures and buildings
+            ('building', (70, 70, 70)),  # Medium gray color for buildings
+            ('wall', (102, 102, 156)),  # Bluish-gray color for walls
+            ('fence', (190, 153, 153)),  # Light reddish-gray color for fences
+            ('guard rail', (180, 165, 180)),  # Light gray with a slight purple hue for guard rails
+            ('bridge', (150, 100, 100)),  # Reddish-brown color for bridges
+            ('tunnel', (150, 120, 90)),  # Muted brown color for tunnels
+
+            # Poles and traffic elements
+            ('pole', (153, 153, 153)),  # Neutral gray color for poles
+            ('pole group', (153, 153, 153)),  # Neutral gray color for a group of poles
+            ('traffic sign', (220, 220, 0)),  # Bright yellow color for traffic signs
+            ('traffic light', (250, 170, 30)),  # Yellow-orange color for traffic lights
+
+            # Natural elements
+            ('vegetation', (107, 142, 35)),  # Green color for vegetation
+            ('terrain', (152, 251, 152)),  # Pale green color for terrain
+
+            # Sky and environmental features
+            ('sky', (70, 130, 180)),  # Sky-blue color for the sky
+
+            # Ground and object types
+            ('ground', (81, 0, 81)),  # Deep purple color for ground
+            ('dynamic', (111, 74, 0)),  # Brownish-yellow color for dynamic objects (moving)
+            ('static', (0, 0, 0))  # Black color for static objects (non-moving)
+        ])
+
         r = np.zeros_like(label)
         g = np.zeros_like(label)
         b = np.zeros_like(label)
@@ -99,8 +153,8 @@ def valid():
             b[label==k] = color[2]
         image = np.concatenate((b,g,r), axis=2).astype(np.uint8())
         image = cv2.resize(image, (hsize, vsize))
-        cv2.imwrite(os.path.join(args.results, 'color_%04d.png'%frame_cnt), image)
-        """
+        cv2.imwrite(os.path.join(results, 'color_%04d.png'%frame_cnt), image)
+        
 
 
 if __name__ == '__main__':
