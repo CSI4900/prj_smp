@@ -1,17 +1,16 @@
-# *********************************************************************************************
-# FILE   NAME:    train.py
-# PROJ   NAME:    Segmentation
-# DESCRIPTION:    training SMP (Segmentation Models Pytorch)
+# =====================================================
+# File Name:    train.py
+# Project Name: Object Segmentation
+# Description:  This program is used to train a 
+#               segmentation model using SMP library
+#               (Segmentation Models Pytorch)
 #
-# HOW TO USE:     download CamVid data to
-#               git clone https://github.com/alexgkendall/SegNet-Tutorial ./data
+# Usage:        $ python train.py
 #
-#
-# REVISION HISTORY
-# YYYY/MMM/DD     Author       Comments
-# 2024 FEB 29     Yu Liu       creation
-#
-# *********************************************************************************************
+# Contributors: 
+# - Zechen Zhou     zzhou186@uottawa.ca
+# - Shun Hei Yiu    syiu017@uottawa.ca
+# =====================================================
 import os
 import cv2
 import torch
@@ -19,10 +18,11 @@ import numpy as np
 import pandas as pd
 import random
 import segmentation_models_pytorch as smp
+from datetime import datetime
 
 from segmentation_models_pytorch import utils
 from torch.utils.data import DataLoader
-from dataset.camvid import CamVid
+from dataset.cityscapes import Cityscapes
 from dataset.augment import *
 from argparse import ArgumentParser
 from config import *
@@ -75,7 +75,7 @@ def train():
     preprocessing_fn = smp.encoders.get_preprocessing_fn(
         ENCODER, ENCODER_WEIGHTS)
 
-    train_dataset = CamVid(
+    train_dataset = Cityscapes(
         x_train_dir,
         y_train_dir,
         augmentation=get_training_augmentation(),
@@ -83,7 +83,7 @@ def train():
         classes=CLASSES,
     )
 
-    valid_dataset = CamVid(
+    valid_dataset = Cityscapes(
         x_valid_dir,
         y_valid_dir,
         augmentation=get_validation_augmentation(),
@@ -138,6 +138,16 @@ def train():
     history = []
 
     for epoch_cnt in range(0, args.epochs):
+        if (epoch_cnt == 0) :
+            now = datetime.now()
+
+            # Different time format
+            time_started_long = now.strftime("%a %b %d %H:%M:%S %Y")  # "Wed Feb 26 15:54:38 2025"
+            time_started_short = now.strftime("%Y%m%d_%H%M%S")        # "20250226_155438"
+
+            print('\nTraining started on ' + time_started_long)
+
+            log_file = 'training_log_'+ time_started_short +'.csv'
 
         print('\nEpoch: {}'.format(epoch_cnt))
         train_logs = train_epoch.run(train_loader)
@@ -157,14 +167,17 @@ def train():
         else:
             raise NotImplemented('not defined lr scheduler')
 
-        history.append({
+        log_data = pd.DataFrame([{
             'epoch': epoch_cnt,
             'lr': train_epoch.optimizer.param_groups[0]['lr'],
             'train_loss': train_logs['dice_loss'],
             'valid_loss': valid_logs['dice_loss'],
             'train_iou': train_logs['iou_score'],
             'valid_iou': valid_logs['iou_score'],
-        })
+        }])
+
+        # Update the log file after each epoch
+        log_data.to_csv(log_file, mode='a', header=not os.path.exists(log_file), index=False)
 
         torch.save({
             'model_param': model.state_dict(),
@@ -173,7 +186,7 @@ def train():
             'epoch_count': epoch_cnt,
         }, LATEST_MODE_NM)
 
-    pd.DataFrame(history).to_csv('training_log.csv', index=False)
+    print('\nTraining finished on ' + datetime.now().strftime("%a %b %d %H:%M:%S %Y"))
 
 
 if __name__ == '__main__':

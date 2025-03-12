@@ -1,26 +1,24 @@
 #!/bin/bash
-#SBATCH --time=0-00:90:00      # Set a time limit
+#SBATCH --time=0-00:3600:00      # Set a time limit
 #SBATCH --account=def-jyzhao   # Specify the account under which this job runs
-#SBATCH --mem=16000M           # Request 32GB of RAM
-#SBATCH --gpus-per-node=1      # Request 1 GPU per node
-#SBATCH --cpus-per-task=10     # Request 10 CPU cores per task
+#SBATCH --mem=32000M           # Request 32GB of RAM
+#SBATCH --gpus-per-node=4      # Request 4 GPU per node
+#SBATCH --cpus-per-task=16     # Request 16 CPU cores per task
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK     # Set the number of OpenMP threads to match the allocated CPUs.
 
 
-# =====================================================
+# ======================================================
 # Batch Script for Compute Canada
-# Author:       Your Name
-# Date:         2025-02-06
-# Description:  This script runs a Python program using
-#               a virtual environment and submits a 
-#               SLURM job (run train.py).
+#
+# Description:  This script submits a SLURM job to
+#               execute `train.py` on compute canada.
 #
 # Usage:        $ sbatch train_job.sh
 #
 # Contributors: 
 # - Zechen Zhou     zzhou186@uottawa.ca
 # - Shun Hei Yiu    syiu017@uottawa.ca
-# =====================================================
+# ======================================================
 
 echo "Hello World"
 
@@ -47,6 +45,6 @@ source ~/prj_smp_workspace/env/bin/activate
 
 tensorboard --logdir=${logdir}/lightning_logs --host 0.0.0.0 --load_fast false & \
     python ~/prj_smp_workspace/train.py \
-    --epochs 5
+    --epochs 50
     # --model Conv \
     # --batch_size 32 \
