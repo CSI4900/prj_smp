@@ -35,7 +35,11 @@ def valid():
         encoder_weights=ENCODER_WEIGHTS,
         classes=N_CLASSES,
         activation=ACTIVATION,
-    )
+    ).to(DEVICE)
+
+    print(torch.cuda.is_available())
+    print(torch.cuda.device_count())
+    print(torch.cuda.get_device_name(0))
 
     if LOAD_BEST_MODEL:
         param = torch.load(BEST_MODEL_NM, map_location=DEVICE, weights_only=False)
@@ -44,15 +48,20 @@ def valid():
         param = torch.load(LATEST_MODE_NM, map_location=DEVICE, weights_only=False)
         model.load_state_dict(param['model_param'])
 
+    # Set to eval mode
+    model.eval()
+
     preprocessing_fn = smp.encoders.get_preprocessing_fn(
         ENCODER, ENCODER_WEIGHTS)
 
-    # start inference
+    # Video setup
     video_file = VALID_VIDEO_DIR
     cap = cv2.VideoCapture(video_file)
     n_frame = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
     vsize = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     hsize = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+
+    list_time = []
 
     frame_cnt = 0
     for frame_cnt in range(n_frame):
@@ -70,13 +79,16 @@ def valid():
         """
         image = cv2.resize(image, (384, 384), interpolation=cv2.INTER_CUBIC)
         din = preprocessing_fn(image, input_space='BGR')
-        din = torch.from_numpy(din).float().permute(2, 0, 1).unsqueeze(0)
+        din = torch.from_numpy(din).float().permute(2, 0, 1).unsqueeze(0).to(DEVICE)
 
         with torch.no_grad():
             # Replace NVTX range_push and range_pop with time-based profiling
             start_time = time.time()  # Start time before the model computation
             dout = model(din)
             end_time = time.time()  # End time after the model computation
+            step_time = end_time-start_time
+
+        list_time.append(step_time)
 
         # Print or log the time taken for the operation
         print(f"Frame {frame_cnt} took {end_time - start_time:.4f} seconds")
@@ -155,7 +167,10 @@ def valid():
         image = cv2.resize(image, (hsize, vsize))
         cv2.imwrite(os.path.join(results, 'color_%04d.png'%frame_cnt), image)
         
+    average_time = sum(list_time)/len(list_time)
 
+    print(f"Frame {frame_cnt} took {end_time - start_time:.4f} seconds")
+    print("Average time: {:.4f} seconds".format(average_time))
 
 if __name__ == '__main__':
 
