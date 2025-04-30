@@ -1,10 +1,3 @@
-This is project of using pypi library segmentation_models_pytorch, briefly called SMP, to segment a target object such as a car or bicycle.
-SMP includes multiple well-known models. The default model used in this project is resent34 and related weights is imagenet
-We only trained single class in this project as an example reference.
-
-train.py: used to train SMP model under configuration config.py where training dataset called CamVid
-valid.py: used to validate the trained model with a video clip called racing_car.sd.mp4
-
 # Overview
 This project uses a PyTorch library called Segmentation Models Pytorch (SMP). We used the U-Net architecture with a MobileOne_s4 encoder pre-trained on ImageNet. This optimal combination was identified in [priori work](CSI4900_Dageng-Ding.pdf) by a student, Dageng Ding.
 
@@ -15,6 +8,23 @@ We trained three models of this setup using the [Cityscapes Foggy dataset](https
 | SMP #1   | 30  |  30  |  462 images  (City: Cologne) | 177 images (City: Lindau) | 138 images (City: Bonn)
 | SMP #2   | 50  |  12  | 2220 images (City: Aachen, Bochurn, Bremen, and Cologne)  | 699 images (City: Lindau, Munster) | 681 images (City: Bielefeld, Bonn)
 | SMP #3   | 50  |  30  | 2220 images (City: Aachen, Bochurn, Bremen, and Cologne)  | 699 images (City: Lindau, Munster) | 681 images (City: Bielefeld, Bonn)
+
+Below are the brief descriptions for each folder and script:
+- train.py: This script is used to train the SMP model under the configuration of `config.py`
+- valid.py: This script is used to validate the trained model with a video clip
+- graphs.py: This script is used to generate the Dice Loss and IoU graph using the training log file
+- config.py: This is a configuration file for this project
+- dataset: This folder contains configuration files for the training dataset
+- params: This folder is used to store the trained model when running `train.py`
+- results: This folder is used to store the model output when running `valid.py`
+- test_data: This folder is used to store the video clips for model testing or validation
+- training_data: This folder contains the training dataset
+
+The following scripts only work for Compute Canada:
+- train_job.sh: This script is used to submit a job to run `train.py` on Compute Canada
+- valid_job.sh: This script is used to submit a job to run `valid.py` on Compute Canada
+- load_modules.sh: This script is used to load relative modules on Compute Canada
+
 
 # Prerequisites
 
