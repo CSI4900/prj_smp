@@ -11,8 +11,14 @@ We trained three models of this setup using the [Cityscapes Foggy dataset](https
 
 Below are the brief descriptions for each folder and script:
 - train.py: This script is used to train the SMP model under the configuration of `config.py`
+  - Usage: `python train.py`
+  
 - valid.py: This script is used to validate the trained model with a video clip
+  - Usage: `python valid.py`
+
 - graphs.py: This script is used to generate the Dice Loss and IoU graph using the training log file
+  - Usage: Update the name of the log file inside `graphs.py`. Then run `python graphs.py`
+
 - config.py: This is a configuration file for this project
 - dataset: This folder contains configuration files for the training dataset
 - params: This folder is used to store the trained model when running `train.py`
@@ -20,11 +26,16 @@ Below are the brief descriptions for each folder and script:
 - test_data: This folder is used to store the video clips for model testing or validation
 - training_data: This folder contains the training dataset
 
+
 The following scripts only work for Compute Canada:
 - train_job.sh: This script is used to submit a job to run `train.py` on Compute Canada
-- valid_job.sh: This script is used to submit a job to run `valid.py` on Compute Canada
-- load_modules.sh: This script is used to load relative modules on Compute Canada
+  - Usage: `sbatch train_job.sh`
 
+- valid_job.sh: This script is used to submit a job to run `valid.py` on Compute Canada
+  - Usage: `sbatch valid_job.sh`
+
+- load_modules.sh: This script is used to load relative modules on Compute Canada
+  - Usage: `./load_modules.sh`
 
 # Prerequisites
 
@@ -84,4 +95,4 @@ The following scripts only work for Compute Canada:
 
 4. 
 
-Version: Feb 6, 2025 00:32
+Version: Apr 30, 2025 16:06
