@@ -5,6 +5,10 @@ We only trained single class in this project as an example reference.
 train.py: used to train SMP model under configuration config.py where training dataset called CamVid
 valid.py: used to validate the trained model with a video clip called racing_car.sd.mp4
 
+# Overview
+This project uses a PyTorch library called Segmentation Models Pytorch (SMP). We used the U-Net architecture with a MobileOne s4 encoder pre-trained on ImageNet. This optimal combination was identified in [priori work](CSI4900_Dageng-Ding.pdf) by a student, Dageng Ding.
+
+We trained three models of this setup using the [Cityscapes Foggy dataset](https://www.cityscapes-dataset.com/file-handling/?packageID=29) (leftImg8bit_trainvaltest_foggy.zip),  and labeled them SMP #1, SMP #2, and SMP #3, in the order they were trained.
 
 # Prerequisites
 
