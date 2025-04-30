@@ -6,9 +6,15 @@ train.py: used to train SMP model under configuration config.py where training d
 valid.py: used to validate the trained model with a video clip called racing_car.sd.mp4
 
 # Overview
-This project uses a PyTorch library called Segmentation Models Pytorch (SMP). We used the U-Net architecture with a MobileOne s4 encoder pre-trained on ImageNet. This optimal combination was identified in [priori work](CSI4900_Dageng-Ding.pdf) by a student, Dageng Ding.
+This project uses a PyTorch library called Segmentation Models Pytorch (SMP). We used the U-Net architecture with a MobileOne_s4 encoder pre-trained on ImageNet. This optimal combination was identified in [priori work](CSI4900_Dageng-Ding.pdf) by a student, Dageng Ding.
 
 We trained three models of this setup using the [Cityscapes Foggy dataset](https://www.cityscapes-dataset.com/file-handling/?packageID=29) (leftImg8bit_trainvaltest_foggy.zip),  and labeled them SMP #1, SMP #2, and SMP #3, in the order they were trained.
+
+| Trained Model | Epochs | Classes | Training Images | Validating Images | Testing Images
+|----------|----------|----------|-----------|------------|------------|
+| SMP #1   | 30  |  30  |  462 images  (City: Cologne) | 177 images (City: Lindau) | 138 images (City: Bonn)
+| SMP #2   | 50  |  12  | 2220 images (City: Aachen, Bochurn, Bremen, and Cologne)  | 699 images (City: Lindau, Munster) | 681 images (City: Bielefeld, Bonn)
+| SMP #3   | 50  |  30  | 2220 images (City: Aachen, Bochurn, Bremen, and Cologne)  | 699 images (City: Lindau, Munster) | 681 images (City: Bielefeld, Bonn)
 
 # Prerequisites
 
