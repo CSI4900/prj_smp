@@ -93,6 +93,4 @@ The following scripts only work for Compute Canada:
 
 3. The Alliance wiki page: [Running jobs](https://docs.alliancecan.ca/wiki/Running_jobs)
 
-4. 
-
-Version: Apr 30, 2025 16:06
+Version: Apr 30, 2025 16:09
