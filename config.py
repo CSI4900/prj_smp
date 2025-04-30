@@ -27,14 +27,14 @@ CLASSES = ['road', 'sidewalk', 'parking', 'rail track', 'person', 'rider', 'car'
 ACTIVATION = 'softmax2d'
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')   
 
-# TRAIN_DATA_DIR = './training_data/CityScapes/part_of_leftImg8bit_foggy'
-TRAIN_DATA_DIR = '~/scratch/training_data/CityScapes/part_of_leftImg8bit_foggy'
+TRAIN_DATA_DIR = './training_data/Cityscapes/smp#1_part_of_leftImg8bit_foggy'
+# TRAIN_DATA_DIR = '~/scratch/training_data/Cityscapes/part_of_leftImg8bit_foggy'
 VALID_VIDEO_DIR = './validating_data/1_test_bike_car.mp4'
 # VALID_VIDEO_DIR = './validating_data/1_test_bike_car_complete.mp4'
 # VALID_VIDEO_DIR = './validating_data/Recording-2025-02-25-121337.mp4'
 # VALID_VIDEO_DIR = './validating_data/1_test_bike_car.mp4'
 # VALID_VIDEO_DIR = './validating_data/racing_cars.sd.mp4'
 
-LOAD_BEST_MODEL = False
-LATEST_MODE_NM = './CityScapes_2025-03-10/Unet_mobileone_s4_30classes_softmax2d_50epochs.pt'
-BEST_MODEL_NM = './CityScapes_2025-03-10/Unet_mobileone_s4_30classes_softmax2d_50epochs.pth'
+LOAD_BEST_MODEL = True
+LATEST_MODE_NM = './params/smp#3_Unet_mobileone_s4_30classes_softmax2d_50epochs.pt'
+BEST_MODEL_NM = './params/smp#3_Unet_mobileone_s4_30classes_softmax2d_50epochs.pth'
